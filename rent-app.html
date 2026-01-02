@@ -15,6 +15,8 @@
             --primary-light: #4d94ff;
             --secondary-color: #ff6b35;
             --accent-color: #00cc88;
+            --danger-color: #ff4757;
+            --warning-color: #ffa502;
             --bg-color: #f5f7fa;
             --card-bg: #ffffff;
             --text-color: #333333;
@@ -29,10 +31,12 @@
             --header-height: 80px;
             --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             --gradient-accent: linear-gradient(135deg, var(--accent-color) 0%, #00aa6d 100%);
+            --gradient-danger: linear-gradient(135deg, var(--danger-color) 0%, #ff2e43 100%);
             --gradient-card: linear-gradient(145deg, #ffffff, #f5f7fa);
             --gradient-card-hover: linear-gradient(145deg, #f8fafc, #edf2f7);
             --neon-glow: 0 0 15px rgba(0, 102, 204, 0.3);
             --neon-glow-accent: 0 0 20px rgba(0, 204, 136, 0.4);
+            --neon-glow-danger: 0 0 15px rgba(255, 71, 87, 0.3);
         }
 
         /* Modo oscuro */
@@ -42,6 +46,8 @@
             --primary-light: #80b3ff;
             --secondary-color: #ff8c66;
             --accent-color: #33ffb5;
+            --danger-color: #ff6b81;
+            --warning-color: #ffbe76;
             --bg-color: #0f172a;
             --card-bg: #1e293b;
             --text-color: #f1f5f9;
@@ -55,6 +61,7 @@
             --gradient-card-hover: linear-gradient(145deg, #334155, #1e293b);
             --neon-glow: 0 0 20px rgba(77, 148, 255, 0.4);
             --neon-glow-accent: 0 0 25px rgba(51, 255, 181, 0.5);
+            --neon-glow-danger: 0 0 20px rgba(255, 107, 129, 0.4);
         }
 
         * {
@@ -386,6 +393,39 @@
             left: 100%;
         }
 
+        /* Botón de eliminar con efecto 3D */
+        .btn-delete {
+            background: var(--gradient-danger);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 5px 15px rgba(255, 71, 87, 0.2),
+                0 3px 10px rgba(255, 71, 87, 0.3);
+            transform: translateZ(0);
+        }
+
+        .btn-delete:hover {
+            transform: translateY(-3px) translateZ(5px);
+            box-shadow: 
+                0 10px 25px rgba(255, 71, 87, 0.3),
+                0 5px 20px rgba(255, 71, 87, 0.4),
+                var(--neon-glow-danger);
+        }
+
         /* Mapa con efectos 3D */
         #map {
             height: 450px;
@@ -450,6 +490,14 @@
             border-radius: 5px 0 0 5px;
         }
 
+        .rent-item.priority-medium::before {
+            background: linear-gradient(135deg, #ffcc00, #ff9900);
+        }
+
+        .rent-item.priority-low::before {
+            background: linear-gradient(135deg, #ff6666, #ff3333);
+        }
+
         .rent-header {
             display: flex;
             justify-content: space-between;
@@ -509,6 +557,44 @@
 
         .priority-low {
             background: linear-gradient(135deg, #ff6666, #ff3333);
+            color: white;
+        }
+
+        /* Controles de acción para rentas */
+        .rent-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transform: translateZ(0);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px) translateZ(3px);
+        }
+
+        .btn-edit {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+            color: white;
+        }
+
+        .btn-view {
+            background: linear-gradient(135deg, var(--accent-color), #00aa6d);
             color: white;
         }
 
@@ -596,6 +682,100 @@
             background: var(--gradient-accent);
         }
 
+        /* Modal de confirmación */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-3d {
+            background: var(--gradient-card);
+            border-radius: var(--border-radius);
+            padding: var(--card-padding);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                var(--neon-glow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            max-width: 500px;
+            width: 90%;
+            transform: translateY(-30px) translateZ(0);
+            transition: transform 0.4s;
+            text-align: center;
+        }
+
+        .modal-overlay.active .modal-3d {
+            transform: translateY(0) translateZ(20px);
+        }
+
+        .modal-header {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-title {
+            color: var(--danger-color);
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .modal-body {
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: var(--text-color);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            min-width: 120px;
+        }
+
+        .modal-btn-confirm {
+            background: var(--gradient-danger);
+            color: white;
+        }
+
+        .modal-btn-cancel {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
         /* Scrollbar personalizado */
         ::-webkit-scrollbar {
             width: 10px;
@@ -629,6 +809,22 @@
 
         .animate-in {
             animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* Efecto de eliminación */
+        @keyframes slideOutRight {
+            from {
+                opacity: 1;
+                transform: translateX(0) translateZ(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100px) translateZ(-20px);
+            }
+        }
+
+        .slide-out {
+            animation: slideOutRight 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
         }
 
         /* Efecto de carga */
@@ -669,12 +865,49 @@
             .card-3d {
                 padding: 20px;
             }
+            
+            .rent-actions {
+                flex-direction: column;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .modal-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body class="light-mode">
     <!-- Fondo con partículas 3D -->
     <div class="particles-container" id="particles"></div>
+    
+    <!-- Modal de confirmación de eliminación -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-3d">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Confirmar Eliminación</h3>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro que deseas eliminar esta renta?</p>
+                <p><strong id="deleteAddress"></strong></p>
+                <p style="margin-top: 15px; color: var(--danger-color); font-size: 0.9rem;">
+                    <i class="fas fa-info-circle"></i> Esta acción no se puede deshacer.
+                </p>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" id="cancelDelete">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button class="modal-btn modal-btn-confirm" id="confirmDelete">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
     
     <!-- Header con efecto 3D -->
     <header>
@@ -756,6 +989,16 @@
             <!-- Lista de rentas -->
             <section class="card-3d animate-in" style="animation-delay: 0.3s;">
                 <h2 class="section-title"><i class="fas fa-list-ul"></i> Rentas Registradas</h2>
+                <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                        <i class="fas fa-info-circle"></i> Haz clic en "Eliminar" para quinar una renta
+                    </div>
+                    <div>
+                        <button class="btn-delete" id="clearAllBtn" style="display: none;">
+                            <i class="fas fa-trash-alt"></i> Eliminar Todas
+                        </button>
+                    </div>
+                </div>
                 <div id="rentList" class="rent-list">
                     <div class="empty-state">
                         <i class="fas fa-home"></i>
@@ -835,6 +1078,8 @@
         let currentTheme = 'light';
         let mapRotation = 0;
         let mapTilt = 0;
+        let rentToDelete = null;
+        let markers = [];
         
         // Inicializar el mapa
         const map = L.map('map', {
@@ -1037,6 +1282,7 @@
             updateRentList();
             updatePriorityRanking();
             updateMap();
+            updateClearAllButton();
             
             // Efecto visual de confirmación
             const card = document.querySelector('.card-3d:nth-child(1)');
@@ -1049,6 +1295,79 @@
             }, 800);
             
             return rent;
+        }
+        
+        // Eliminar renta por ID
+        function deleteRent(id) {
+            const index = rents.findIndex(rent => rent.id === id);
+            if (index === -1) return false;
+            
+            // Animación de eliminación
+            const rentElement = document.querySelector(`.rent-item[data-id="${id}"]`);
+            if (rentElement) {
+                rentElement.classList.add('slide-out');
+                setTimeout(() => {
+                    rents.splice(index, 1);
+                    updateRentList();
+                    updatePriorityRanking();
+                    updateMap();
+                    updateClearAllButton();
+                    showNotification('Renta eliminada exitosamente', 'success');
+                }, 500);
+            } else {
+                rents.splice(index, 1);
+                updateRentList();
+                updatePriorityRanking();
+                updateMap();
+                updateClearAllButton();
+                showNotification('Renta eliminada exitosamente', 'success');
+            }
+            
+            return true;
+        }
+        
+        // Eliminar todas las rentas
+        function deleteAllRents() {
+            if (rents.length === 0) return;
+            
+            // Animación para todos los elementos
+            const rentElements = document.querySelectorAll('.rent-item');
+            rentElements.forEach(element => {
+                element.classList.add('slide-out');
+            });
+            
+            setTimeout(() => {
+                rents = [];
+                updateRentList();
+                updatePriorityRanking();
+                updateMap();
+                updateClearAllButton();
+                showNotification('Todas las rentas han sido eliminadas', 'success');
+            }, 500);
+        }
+        
+        // Mostrar modal de confirmación para eliminar
+        function showDeleteConfirmation(rentId, address) {
+            rentToDelete = rentId;
+            document.getElementById('deleteAddress').textContent = address;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+        
+        // Mostrar modal de confirmación para eliminar todas
+        function showDeleteAllConfirmation() {
+            rentToDelete = 'all';
+            document.getElementById('deleteAddress').textContent = `${rents.length} rentas registradas`;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+        
+        // Actualizar botón "Eliminar Todas"
+        function updateClearAllButton() {
+            const clearAllBtn = document.getElementById('clearAllBtn');
+            if (rents.length > 0) {
+                clearAllBtn.style.display = 'block';
+            } else {
+                clearAllBtn.style.display = 'none';
+            }
         }
         
         // Actualizar lista de rentas
@@ -1067,7 +1386,7 @@
             }
             
             rentList.innerHTML = rents.map(rent => `
-                <div class="rent-item" data-id="${rent.id}">
+                <div class="rent-item priority-${rent.priority}" data-id="${rent.id}">
                     <div class="rent-header">
                         <div class="rent-address">${rent.address}</div>
                         <div class="rent-distance">${rent.walkingMinutes} min</div>
@@ -1080,11 +1399,27 @@
                     <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 10px;">
                         ${rent.notes || '<em>Sin notas adicionales</em>'}
                     </div>
-                    <div class="rent-priority priority-${rent.priority}">
-                        ${rent.priority === 'high' ? '★ Alta prioridad' : rent.priority === 'medium' ? '↠ Prioridad media' : '↡ Baja prioridad'}
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="rent-priority priority-${rent.priority}">
+                            ${rent.priority === 'high' ? '★ Alta prioridad' : rent.priority === 'medium' ? '↠ Prioridad media' : '↡ Baja prioridad'}
+                        </div>
+                        <div class="rent-actions">
+                            <button class="btn-delete delete-rent-btn" data-id="${rent.id}" data-address="${rent.address}">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join('');
+            
+            // Añadir event listeners a los botones de eliminar
+            document.querySelectorAll('.delete-rent-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const rentId = parseInt(this.getAttribute('data-id'));
+                    const address = this.getAttribute('data-address');
+                    showDeleteConfirmation(rentId, address);
+                });
+            });
         }
         
         // Actualizar ranking
@@ -1110,7 +1445,7 @@
             });
             
             priorityRanking.innerHTML = sortedRents.map((rent, index) => `
-                <div class="rent-item" data-id="${rent.id}">
+                <div class="rent-item priority-${rent.priority}" data-id="${rent.id}">
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <div style="width: 30px; height: 30px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; box-shadow: 0 3px 10px rgba(0, 102, 204, 0.3);">
@@ -1127,18 +1462,31 @@
                         <div class="rent-price" style="font-size: 1.3rem;">$${rent.price.toLocaleString('es-MX')}</div>
                         <div class="rent-distance">${rent.walkingMinutes} min</div>
                     </div>
+                    <div style="margin-top: 10px;">
+                        <button class="btn-delete delete-rent-btn" data-id="${rent.id}" data-address="${rent.address}" style="padding: 6px 12px; font-size: 0.8rem;">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </div>
                 </div>
             `).join('');
+            
+            // Añadir event listeners a los botones de eliminar en el ranking
+            document.querySelectorAll('#priorityRanking .delete-rent-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const rentId = parseInt(this.getAttribute('data-id'));
+                    const address = this.getAttribute('data-address');
+                    showDeleteConfirmation(rentId, address);
+                });
+            });
         }
         
         // Actualizar mapa
         function updateMap() {
             // Limpiar marcadores
-            map.eachLayer(layer => {
-                if (layer instanceof L.Marker && layer !== unamMarker) {
-                    map.removeLayer(layer);
-                }
+            markers.forEach(marker => {
+                map.removeLayer(marker);
             });
+            markers = [];
             
             // Añadir marcadores para cada renta
             rents.forEach(rent => {
@@ -1176,7 +1524,14 @@
                         <div><b>Prioridad:</b> <span style="color: ${rent.priority === 'high' ? '#00cc88' : rent.priority === 'medium' ? '#ff9900' : '#ff3333'}">${rent.priority === 'high' ? 'Alta' : rent.priority === 'medium' ? 'Media' : 'Baja'}</span></div>
                         <div><b>Área:</b> ${rent.location.area}</div>
                         ${rent.notes ? `<div><b>Notas:</b> ${rent.notes}</div>` : ''}
+                        <div style="margin-top: 10px;">
+                            <button onclick="showDeleteConfirmation(${rent.id}, '${rent.address.replace(/'/g, "\\'")}')" style="background: #ff4757; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8rem;">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </div>
                     `);
+                
+                markers.push(marker);
             });
             
             // Ajustar vista si hay rentas
@@ -1235,6 +1590,33 @@
             document.getElementById('rentForm').addEventListener('submit', handleFormSubmit);
             document.getElementById('rotateView').addEventListener('click', rotateMapView);
             document.getElementById('resetView').addEventListener('click', resetMapView);
+            document.getElementById('clearAllBtn').addEventListener('click', showDeleteAllConfirmation);
+            
+            // Configurar eventos del modal
+            document.getElementById('cancelDelete').addEventListener('click', function() {
+                document.getElementById('deleteModal').classList.remove('active');
+                rentToDelete = null;
+            });
+            
+            document.getElementById('confirmDelete').addEventListener('click', function() {
+                document.getElementById('deleteModal').classList.remove('active');
+                
+                if (rentToDelete === 'all') {
+                    deleteAllRents();
+                } else if (rentToDelete) {
+                    deleteRent(rentToDelete);
+                }
+                
+                rentToDelete = null;
+            });
+            
+            // Cerrar modal al hacer clic fuera
+            document.getElementById('deleteModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                    rentToDelete = null;
+                }
+            });
             
             // Añadir rentas de ejemplo después de un breve retraso
             setTimeout(addExampleRents, 1500);
